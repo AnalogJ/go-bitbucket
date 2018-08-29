@@ -147,7 +147,7 @@ func (c *Client) execute(method string, urlStr string, text string) (interface{}
 	}
 
 	c.authenticateRequest(req)
-	result, err := c.doRequest(req)
+	result, err := c.doRequest(req, false)
 
 	//autopaginate.
 	resultMap, isMap := result.(map[string]interface{})
@@ -222,7 +222,7 @@ func (c *Client) executeFileUpload(method string, urlStr string, filePath string
 	req.Header.Set("Content-Type", w.FormDataContentType())
 
 	c.authenticateRequest(req)
-	return c.doRequest(req)
+	return c.doRequest(req, true)
 
 }
 
@@ -240,7 +240,7 @@ func (c *Client) authenticateRequest(req *http.Request){
 }
 
 
-func (c *Client) doRequest(req *http.Request) (interface{}, error){
+func (c *Client) doRequest(req *http.Request, emptyResponse bool) (interface{}, error){
 
 	resp, err := c.HttpClient.Do(req)
 	if err != nil {
@@ -252,6 +252,10 @@ func (c *Client) doRequest(req *http.Request) (interface{}, error){
 
 	if (resp.StatusCode != http.StatusOK) && (resp.StatusCode != http.StatusCreated) {
 		return nil, fmt.Errorf(resp.Status)
+	}
+
+	if emptyResponse {
+		return nil, nil
 	}
 
 	if resp.Body == nil {
