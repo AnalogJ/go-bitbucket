@@ -189,7 +189,7 @@ func (c *Client) execute(method string, urlStr string, text string) (interface{}
 	return result, nil
 }
 
-func (c *Client) executeFileUpload(method string, urlStr string, filePath string) (interface{}, error) {
+func (c *Client) executeFileUpload(method string, urlStr string, filePath string, fileName string) (interface{}, error) {
 	fileReader, err := os.Open(filePath)
 	if err != nil {
 		return nil, err
@@ -201,7 +201,7 @@ func (c *Client) executeFileUpload(method string, urlStr string, filePath string
 	w := multipart.NewWriter(&b)
 
 	var fw io.Writer
-	if fw, err = w.CreateFormFile("files", fileReader.Name()); err != nil {
+	if fw, err = w.CreateFormFile("files", fileName); err != nil {
 		return nil , err
 	}
 
