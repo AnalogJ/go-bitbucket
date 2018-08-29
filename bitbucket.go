@@ -204,4 +204,5 @@ type DownloadsOptions struct {
 	Owner       string `json:"owner"`
 	RepoSlug    string `json:"repo_slug"`
 	FilePath    string `json:"filepath"`
+	FileName    string `json:"filename"`
 }
